@@ -18,7 +18,7 @@ jobs:
           RUN_NUMBER: ${{ github.run_number }}
         id: custom-vars
         run: |
-          echo "BUILD_VERSION=v$(date +%Y.%m).$RUN_NUMBER" >> $GITHUB_OUTPUT
+          echo "BUILD_VERSION=$(date +%Y.%m).$RUN_NUMBER" >> $GITHUB_OUTPUT
       - name: Create tag
         # https://stackoverflow.com/questions/60963759/use-github-actions-to-create-a-tag-but-not-a-release
         uses: actions/github-script@v7
@@ -46,7 +46,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --auto-snapshot --clean
+          args: release --auto-snapshot --clean --skip-validate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.custom-vars.outputs.BUILD_VERSION }}
