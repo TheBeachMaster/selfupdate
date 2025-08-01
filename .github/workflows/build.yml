@@ -46,8 +46,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --auto-snapshot
-          # args: release --auto-snapshot --clean
+          args: release --auto-snapshot --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.custom-vars.outputs.BUILD_VERSION }}
