@@ -39,5 +39,11 @@ func (s *serviceHandler) CheckAppVersionHandler() http.HandlerFunc {
 
 // UpdateAppHandler implements ServiceHandler.
 func (s *serviceHandler) UpdateAppHandler() http.HandlerFunc {
-	panic("unimplemented")
+	return func(writer http.ResponseWriter, request *http.Request) {
+		if request.Method != http.MethodPost {
+			writer.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		// TODO:
+	}
 }
