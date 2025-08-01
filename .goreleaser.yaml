@@ -8,6 +8,9 @@
 
 version: 2
 
+env:
+  - BUILD_VERSION={{ .Env.VERSION }}
+
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -25,6 +28,7 @@ builds:
     binary: selfupdate
     ldflags:
       - -s -w
+      - -X com.thebeachmaster/selfupdate/internal/pkg/version.CurrentVersion={{ .Env.BUILD_VERSION }}
     goarch:
       - amd64
       - arm64

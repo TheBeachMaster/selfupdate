@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strings"
 
+	"com.thebeachmaster/selfupdate/internal/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -40,6 +41,7 @@ var serveCmd = &cobra.Command{
 		}
 
 		fmt.Printf("Flags %s\n", flSb.String())
+		fmt.Printf("Starting service v%s \n", version.CurrentVersion)
 	},
 }
 

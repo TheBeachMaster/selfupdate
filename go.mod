@@ -3,6 +3,7 @@ module com.thebeachmaster/selfupdate
 go 1.24.4
 
 require (
+	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/cavaliergopher/grab/v3 v3.0.1
 	github.com/google/go-github/v74 v74.0.0
