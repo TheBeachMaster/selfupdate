@@ -18,7 +18,7 @@ jobs:
           RUN_NUMBER: ${{ github.run_number }}
         id: custom-vars
         run: |
-          echo "BUILD_VERSION=v$(date +%Y.%m).$RUN_NUM" >> $GITHUB_OUTPUT
+          echo "BUILD_VERSION=v$(date +%Y.%m).$RUN_NUMBER" >> $GITHUB_OUTPUT
       - name: Create tag
         # https://stackoverflow.com/questions/60963759/use-github-actions-to-create-a-tag-but-not-a-release
         uses: actions/github-script@v7
