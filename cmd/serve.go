@@ -82,7 +82,7 @@ var serveCmd = &cobra.Command{
 				opts = append(opts, p_cfg.Github.AcccessToken)
 			}
 
-			_hdlr := service.NewServiceHandler(opts...)
+			_hdlr := service.NewServiceHandler(flSb.String(), opts...)
 			mux.Handle("/version", _hdlr.CheckAppVersionHandler())
 			mux.Handle("/update", _hdlr.UpdateAppHandler())
 			go func() {

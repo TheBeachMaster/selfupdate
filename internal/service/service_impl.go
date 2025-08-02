@@ -3,8 +3,10 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"runtime"
 	"slices"
 	"strings"
@@ -19,9 +21,10 @@ type serviceHandler struct {
 	updateService  updater.Updater
 	githubClient   github.GithubClient
 	versionService version.Version
+	cmdArgs        string // The commandline args that the app was started with
 }
 
-func NewServiceHandler(opts ...string) ServiceHandler {
+func NewServiceHandler(_cmdArgs string, opts ...string) ServiceHandler {
 	var _githubClient github.GithubClient
 	if len(opts) > 0 {
 		// We only care about the first option - for now
@@ -33,6 +36,7 @@ func NewServiceHandler(opts ...string) ServiceHandler {
 		githubClient:   _githubClient,
 		updateService:  updater.NewUpdater(),
 		versionService: version.NewVersionService(),
+		cmdArgs:        _cmdArgs,
 	}
 }
 
@@ -133,6 +137,43 @@ func (s *serviceHandler) UpdateAppHandler() http.HandlerFunc {
 			writer.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
-		// TODO:
+		_req := &UpgradeAppVersionRequest{}
+		if err := json.NewDecoder(request.Body).Decode(_req); err != nil {
+			log.Printf("ERROR:unable to parse user input due to %s\n", err.Error())
+			http.Error(writer, "invalid request data", http.StatusBadRequest)
+			return
+		}
+		// Make sure the URL is valid
+		if _, err := url.Parse(_req.DownloadURL); err != nil {
+			if err := json.NewDecoder(request.Body).Decode(_req); err != nil {
+				log.Printf("ERROR:unable to parse URL due to %s\n", err.Error())
+				http.Error(writer, "invalid download URL", http.StatusBadRequest)
+				return
+			}
+		}
+
+		// Download
+		_downloadPath, err := s.updateService.DownloadFile(_req.DownloadURL)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// Extract
+		_binFilePath, err := s.updateService.ExtractFile(_downloadPath)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// Update
+		go func(m_binFilePath string) {
+			if err := s.updateService.UpdateBinary(m_binFilePath, s.cmdArgs); err != nil {
+				log.Println(err.Error())
+			}
+		}(_binFilePath)
+		//
+		// Bye!!
+		writer.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		writer.WriteHeader(http.StatusOK)
+		io.WriteString(writer, "update in progress\n")
 	}
 }
