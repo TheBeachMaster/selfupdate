@@ -42,7 +42,7 @@ curl --request POST \
 ### Upgrade Version
 ---
 
-__Change URL to mathc above response__
+__Change URL to match above response__
 
 ```sh
 curl --request POST \
