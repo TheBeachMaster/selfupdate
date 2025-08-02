@@ -1,6 +1,6 @@
 package version
 
-var CurrentVersion string = "0.0.0"
+var CurrentVersion string = "0.1.0"
 
 type Version interface {
 	CompareVersions(remoteVersion string) bool

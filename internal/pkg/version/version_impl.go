@@ -25,6 +25,7 @@ func (v *versionService) CompareVersions(remoteVersion string) bool {
 		log.Printf("ERROR: invalid current version %s - %s", CurrentVersion, err.Error())
 		return false
 	}
+	// log.Printf("\nCurrent: v%s \nRemote: v%s\nLatest?: %d\n", _curVersion.String(), _newVersion.String(), _newVersion.Compare(_curVersion))
 
 	return _newVersion.GreaterThan(_curVersion)
 }

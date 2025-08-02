@@ -7,10 +7,10 @@ import (
 )
 
 type ReleaseRequest struct {
-	RepoOwner string
-	RepoName  string
+	RepoOwner string `json:"owner"`
+	RepoName  string `json:"repo"`
 }
 
 type GithubClient interface {
-	GetLatestReleaseAsset(ctx context.Context, req *ReleaseRequest) (*githubSDK.ReleaseAsset, error)
+	GetLatestReleaseAsset(ctx context.Context, req *ReleaseRequest) ([]*githubSDK.ReleaseAsset, error)
 }

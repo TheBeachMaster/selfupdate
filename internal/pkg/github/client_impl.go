@@ -2,7 +2,6 @@ package github
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	githubSDK "github.com/google/go-github/v74/github"
@@ -33,17 +32,12 @@ func NewGithubClient(opts ...GithubClientConfigOptions) GithubClient {
 }
 
 // GetLatestReleaseAsset implements GithubClient.
-func (g *GithubClientConfig) GetLatestReleaseAsset(ctx context.Context, req *ReleaseRequest) (*githubSDK.ReleaseAsset, error) {
-	_rel, _res, err := g.githubClient.Repositories.GetLatestRelease(ctx, req.RepoOwner, req.RepoName)
+func (g *GithubClientConfig) GetLatestReleaseAsset(ctx context.Context, req *ReleaseRequest) ([]*githubSDK.ReleaseAsset, error) {
+	_rel, _, err := g.githubClient.Repositories.GetLatestRelease(ctx, req.RepoOwner, req.RepoName)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	log.Println(_res.Response)
 
-	if len(_rel.Assets) > 0 {
-		return _rel.Assets[0], nil
-	}
-
-	return nil, fmt.Errorf("no assets")
+	return _rel.Assets, nil
 }

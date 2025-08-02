@@ -7,7 +7,7 @@ type Config struct {
 }
 
 type GithubConfig struct {
-	AcccessToken string `env:"AccessToken"`
+	AcccessToken string `env:"ACCESSTOKEN"`
 }
 
 func New() *Config {
