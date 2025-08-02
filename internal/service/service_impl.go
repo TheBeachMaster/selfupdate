@@ -174,6 +174,6 @@ func (s *serviceHandler) UpdateAppHandler() http.HandlerFunc {
 		// Bye!!
 		writer.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		writer.WriteHeader(http.StatusOK)
-		io.WriteString(writer, "update in progress\n")
+		_, _ = io.WriteString(writer, "update in progress\n")
 	}
 }
